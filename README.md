@@ -69,4 +69,6 @@
  *  Gira System 55 EePaper Display Wrist: https://www.tinkercad.com/things/0SN0mNvNaRC
  *  Gira System 55 EePaper Display 3: https://www.tinkercad.com/things/0aLU2I10yRt
  *
+ *  LILYGO® TTGO Wrist-E-Paper ESP32: https://a.aliexpress.com/_uvCWAF
+ *  
  *
