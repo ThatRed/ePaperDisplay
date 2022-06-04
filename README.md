@@ -70,5 +70,6 @@
  *  Gira System 55 EePaper Display 3: https://www.tinkercad.com/things/0aLU2I10yRt
  *
  *  LILYGO® TTGO Wrist-E-Paper ESP32: https://a.aliexpress.com/_uvCWAF
+ *  Wichtig! Es wird ein Programmieradapter benötigt!
  *  
  *
