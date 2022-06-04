@@ -63,7 +63,10 @@
  *  
  *  Im Boardverwalter für ESP32, Version 2.0.3 installieren.
  *  
- *  3D-Dateien: https://www.thingiverse.com/thing:5402812
- *  Gira System 55 EePaper Display Wrist flush: https://www.tinkercad.com/things/iELsnfjnHlb
- *  
+ *  3D-Dateien: 
+ *  Thingiverse: https://www.thingiverse.com/thing:5402812
+ *  Gira System 55 EePaper Display Wrist flush: https://www.tinkercad.com/things/iELsnfjnHlb  
+ *  Gira System 55 EePaper Display Wrist: https://www.tinkercad.com/things/0SN0mNvNaRC
+ *  Gira System 55 EePaper Display 3: https://www.tinkercad.com/things/0aLU2I10yRt
+ *
  *
