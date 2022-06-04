@@ -62,6 +62,8 @@
  *  Richtiges Board und Port unter Werkzeuge auswählen!! 
  *  
  *  Im Boardverwalter für ESP32, Version 2.0.3 installieren.
+ *
+ *  3D-Dateien: https://www.thingiverse.com/thing:5402812
  *  
  *  Anfang benutzerdefinierte Konfiguration:
  *
