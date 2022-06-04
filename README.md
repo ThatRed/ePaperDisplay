@@ -35,14 +35,14 @@ Fonts/FreeSansBold24pt7b.h>
 
 WEMOS D1 mini Verkabelung:
 
-Busy violett D1
-RST  weiss   D0
-DC   grün    D2
-CS   orange  D8
-CLK  gelb    D5
-DIN  blau    D7
-GND  braun   G
-VCC  grau    3V3
+ Busy violett D1
+ RST  weiss   D0
+ DC   grün    D2
+ CS   orange  D8
+ CLK  gelb    D5
+ DIN  blau    D7
+ GND  braun   G
+ VCC  grau    3V3
 
 Board: "LOLIN(WEMOS) D1 R2 & mini"
 
