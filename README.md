@@ -61,7 +61,7 @@
  *  
  *  Richtiges Board und Port unter Werkzeuge auswählen!! 
  *  
- *  Im Boardverwalter für ESP32, Version 2.0.3 installieren.
+ *  Im Boardverwalter für ESP32, Version 2.0.4 installieren.
  *
  *  Den DC to DC Converter auf 5V einstellen.
  *  
@@ -75,4 +75,4 @@
  *  Wichtig! Es wird ein Programmieradapter benötigt! Der USB-C Port auf der Platine ist kein echter USB-Port!!
  *  MP1584EN DC-DC 3A Buck Converter (24V->5V): https://www.amazon.de/dp/B07MY2XP21/ref=cm_sw_r_cp_api_i_C4W4QEAWF79WXW4AJQAR?_encoding=UTF8&psc=1
  *
- *
+ *  1.7: Wifi Part etwas überarbeitet
