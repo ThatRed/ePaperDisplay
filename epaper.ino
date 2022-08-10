@@ -61,8 +61,8 @@
  *  
  *  Richtiges Board und Port unter Werkzeuge auswählen!! 
  *  
- *  Im Boardverwalter für ESP32, Version 2.0.3 installieren.
- *
+ *  Im Boardverwalter für ESP32, Version 2.0.4 installieren.
+ *  
  *  3D-Dateien: https://www.thingiverse.com/thing:5402812
  *  
  *  Anfang benutzerdefinierte Konfiguration:
@@ -119,7 +119,7 @@ unsigned long previousMillis = 0;
 unsigned long wifipreviousMillis = 0;
 unsigned long wifiinterval = 30000;
 
-const char* Version = "1.6";
+const char* Version = "1.7";
 const char compile_date[] = __DATE__ " " __TIME__;
 
 // Im Boardverwalter für ESP32, Version 2.0.3 installieren.
@@ -132,6 +132,8 @@ const char compile_date[] = __DATE__ " " __TIME__;
 #else
   #error "Nur für Entwicklungsboards basierend auf ESP8266 oder ESP32!"
 #endif
+
+#include "nvs_flash.h"
 
 #include "time.h"
 #include <GxEPD.h>
@@ -288,6 +290,9 @@ void setup_wifi() {
   WiFi.hostname(mqttClient);
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
+    ESP_ERROR_CHECK(nvs_flash_erase());
+    nvs_flash_init();
+    //ESP.restart();
     delay(500);
     Serial.print(".");
   }
@@ -571,7 +576,10 @@ void VibraMotor()
 // Farben: GxEPD_WHITE, GxEPD_BLACK, GxEPD_RED
 
 void setup() {
+ 
+  //WiFi.disconnect(false,true);
   Serial.begin(115200);
+  WiFi.setSleep(false);
   setup_wifi();
   Serial.print("RSSI: ");
   Serial.println(WiFi.RSSI());
