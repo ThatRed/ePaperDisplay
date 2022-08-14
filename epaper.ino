@@ -61,7 +61,7 @@
  *  
  *  Richtiges Board und Port unter Werkzeuge auswählen!! 
  *  
- *  Im Boardverwalter für ESP32, Version 2.0.3 installieren.
+ *  Im Boardverwalter für ESP32, Version 2.0.4 installieren.
  *  
  *  3D-Dateien: https://www.thingiverse.com/thing:5402812
  *  
@@ -125,7 +125,7 @@ unsigned long restartinterval = 30000;
 const char* Version = "1.7.3";
 const char compile_date[] = __DATE__ " " __TIME__;
 
-// Im Boardverwalter für ESP32, Version 2.0.3 installieren.
+// Im Boardverwalter für ESP32, Version 2.0.4 installieren.
 #ifdef ESP8266
   #include <ESP8266WiFi.h>
   #include <ESP8266mDNS.h>
