@@ -61,7 +61,7 @@
  *  
  *  Richtiges Board und Port unter Werkzeuge auswählen!! 
  *  
- *  Im Boardverwalter für ESP32, Version 2.0.4 installieren.
+ *  Im Boardverwalter für ESP32, Version 2.0.3 installieren.
  *  
  *  3D-Dateien: https://www.thingiverse.com/thing:5402812
  *  
@@ -85,11 +85,11 @@ const char* mqttPassword = "Passwort";
 //
 const char* mqttTopic_CO2 = "myhome/Raum/CO2";
 const char* mqttTopic_Vibra = "myhome/Raum/Vibra"; 
-const char* mqttTopic_PVModule = "myhome/Balkon/PV-Module";
-const char* mqttTopic_Hum = "myhome/Nord/Hum";
-const char* mqttTopic_Temp = "myhome/Nord/Temp";
-const char* mqttTopic_Power = "myhome/Wohnung/Bezug";
-// const char* mqttTopic_ApartmentPresence = "myhome/Wohnung/AnAbwesendheit";
+const char* mqttTopic_PVModule = "myhome/Raum/PV-Module";
+const char* mqttTopic_Hum = "myhome/Raum/Hum";
+const char* mqttTopic_Temp = "myhome/Raum/Temp";
+const char* mqttTopic_Power = "myhome/Raum/Bezug";
+// const char* mqttTopic_ApartmentPresence = "myhome/Raum/AnAbwesendheit";
 //
 // NTP Server Konfiguration
 //
@@ -115,11 +115,14 @@ int SCDelay = 6000;
 //
 const long interval = 60000;
 int timeState = 0;
+int restartState = 0;
 unsigned long previousMillis = 0; 
 unsigned long wifipreviousMillis = 0;
+unsigned long restartpreviousMillis = 0;
 unsigned long wifiinterval = 30000;
+unsigned long restartinterval = 30000;
 
-const char* Version = "1.7";
+const char* Version = "1.7.3";
 const char compile_date[] = __DATE__ " " __TIME__;
 
 // Im Boardverwalter für ESP32, Version 2.0.3 installieren.
@@ -277,33 +280,85 @@ GxEPD_Class display(io, /*RST=*/EPD_RESET, /*BUSY=*/EPD_BUSY);
 
 // #include "bilder.h"
 #include "epdSplash.h"
-
+int status = WL_IDLE_STATUS;
 WiFiClient espClient;
 PubSubClient client(espClient);
+
+String get_wifi_status(int status){
+    switch(status){
+        case WL_IDLE_STATUS:
+        return "WL_IDLE_STATUS";
+        case WL_SCAN_COMPLETED:
+        return "WL_SCAN_COMPLETED";
+        case WL_NO_SSID_AVAIL:
+        return "WL_NO_SSID_AVAIL";
+        case WL_CONNECT_FAILED:
+        return "WL_CONNECT_FAILED";
+        case WL_CONNECTION_LOST:
+        return "WL_CONNECTION_LOST";
+        case WL_CONNECTED:
+        return "WL_CONNECTED";
+        case WL_DISCONNECTED:
+        return "WL_DISCONNECTED";
+    }
+}
 
 void setup_wifi() {
   delay(10);
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
+  Serial.print("wifi status: ");
+  Serial.println(get_wifi_status(status));
   WiFi.mode(WIFI_STA);
   WiFi.hostname(mqttClient);
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
-    ESP_ERROR_CHECK(nvs_flash_erase());
-    nvs_flash_init();
-    //ESP.restart();
+    unsigned long restartcurrentMillis = millis();
+    status = WiFi.status();
+    Serial.print("wifi status: ");
+    Serial.println(get_wifi_status(status));
+    //Serial.print(".");
     delay(500);
-    Serial.print(".");
-  }
-  
+    WiFi.disconnect();
+    delay(500);
+    WiFi.reconnect();
+    delay(500);
+    // restart nach einer Minute updaten
+    if (restartcurrentMillis - restartpreviousMillis >= restartinterval) {
+    // save the last time you updated the time
+      restartpreviousMillis = restartcurrentMillis;
+    // if the timeState is 0 set it to 1 and vice-versa:
+        if (restartState == 0) {
+            restartState = 1;
+            } else {
+               restartState = 0;
+            } 
+         ESP_ERROR_CHECK(nvs_flash_erase());
+         nvs_flash_init();
+         delay(500);
+         ESP.restart();
+        }   
+      }  
   Serial.println("");
   Serial.print("WiFi connected - ESP IP address: ");
-  Serial.println(WiFi.localIP());
-  
+  Serial.println(WiFi.localIP()); 
 }
 
 // Farben: GxEPD_WHITE, GxEPD_BLACK, GxEPD_RED
+
+#ifdef Display_Wrist_v2_ESP32
+void VibraMotor(){
+  pinMode(PIN_MOTOR, OUTPUT);
+  digitalWrite(PIN_MOTOR, HIGH);
+  webota.delay(200);
+  digitalWrite(PIN_MOTOR, LOW);
+  webota.delay(100);
+  digitalWrite(PIN_MOTOR, HIGH);
+  webota.delay(200);
+  digitalWrite(PIN_MOTOR, LOW);
+}
+#endif
 
 void callback(String topic, byte* message, unsigned int length) {
   Serial.print("Message arrived on topic: ");
@@ -448,7 +503,7 @@ if(topic==mqttTopic_Vibra){
 
 void reconnect() {
   while (!client.connected()) {
-    Serial.print("Attempting MQTT connection...");
+    Serial.println("Attempting MQTT connection...");
     if (client.connect(mqttClient, mqttUser, mqttPassword)) {
       Serial.println("connected");  
       // client.subscribe("NodeRED/KWL_Stufe");
@@ -463,14 +518,26 @@ void reconnect() {
       client.subscribe(mqttTopic_Vibra);    
        #endif
       } else {
+      status = WiFi.status();
+      Serial.print("wifi status: ");
+      Serial.println(get_wifi_status(status));
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
+      WiFi.disconnect();
+      delay(500);
+      WiFi.reconnect();
+      delay(500);
+      if (status == WL_DISCONNECTED) {
+        //exit;
+        return;
+        }
+      }
       // delay(5000);
       webota.delay(5000);
     }
   }
-}
+//}
 
 #ifdef ESP8266
 char buffer[80];
@@ -559,26 +626,11 @@ void showsplash()
 }
 
 
-#ifdef Display_Wrist_v2_ESP32
-void VibraMotor()
-{
-  pinMode(PIN_MOTOR, OUTPUT);
-  digitalWrite(PIN_MOTOR, HIGH);
-  webota.delay(200);
-  digitalWrite(PIN_MOTOR, LOW);
-  webota.delay(100);
-  digitalWrite(PIN_MOTOR, HIGH);
-  webota.delay(200);
-  digitalWrite(PIN_MOTOR, LOW);
-}
-#endif
-
 // Farben: GxEPD_WHITE, GxEPD_BLACK, GxEPD_RED
 
 void setup() {
- 
-  //WiFi.disconnect(false,true);
   Serial.begin(115200);
+  WiFi.disconnect(false,true);
   WiFi.setSleep(false);
   setup_wifi();
   Serial.print("RSSI: ");
@@ -595,17 +647,20 @@ void setup() {
   #endif
 
   // Farben: GxEPD_WHITE, GxEPD_BLACK, GxEPD_RED 
+  Serial.println("Epaper init");
   display.init();
   display.fillScreen(GxEPD_WHITE);
   // display.update();
   display.setRotation(0);
-
+  Serial.println("Show splash screen");
   showsplash();
   
   webota.delay(SCDelay);
   
+  Serial.println("Epaper init");
   display.fillScreen(GxEPD_WHITE);
-  
+
+  Serial.println("Show grid");
   display.fillRect(100, 0, 2, 200, GxEPD_BLACK);
   display.fillRect(0, 66, 200, 2, GxEPD_BLACK);
   display.fillRect(0, 133, 200, 2, GxEPD_BLACK);
@@ -651,6 +706,9 @@ void setup() {
 }
 
 void loop() {
+
+   // status = WiFi.status();
+   // Serial.println(get_wifi_status(status));
  
   if (!client.connected()) {
     reconnect();
@@ -662,7 +720,6 @@ void loop() {
   webota.handle();
   
   unsigned long currentMillis = millis();
-
   // Uhrzeit jede Minute updaten
   if (currentMillis - previousMillis >= interval) {
     // save the last time you updated the time
@@ -681,9 +738,13 @@ void loop() {
   // if WiFi is down, try reconnecting every CHECK_WIFI_TIME seconds
   if ((WiFi.status() != WL_CONNECTED) && (wificurrentMillis - wifipreviousMillis >=wifiinterval)) {
     Serial.print(millis());
+    status = WiFi.status();
+    Serial.println(get_wifi_status(status));
+    delay(500);
     Serial.println("Reconnecting to WiFi...");
     WiFi.disconnect();
     WiFi.reconnect();
+    delay (5000);
     wifipreviousMillis = wificurrentMillis;
   }
 } 
