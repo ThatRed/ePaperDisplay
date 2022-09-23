@@ -76,3 +76,6 @@
  *  MP1584EN DC-DC 3A Buck Converter (24V->5V): https://www.amazon.de/dp/B07MY2XP21/ref=cm_sw_r_cp_api_i_C4W4QEAWF79WXW4AJQAR?_encoding=UTF8&psc=1
  *
  *  1.7: Wifi Part etwas überarbeitet
+ *
+ *  23.09.2022: Kondensator unterhalb der Antenne entfernt. Jetzt ist der Wifi-Empfang deutlich besser. (Modifikaton auf eigene Gefahr!!!)
+ *  
