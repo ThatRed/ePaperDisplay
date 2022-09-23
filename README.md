@@ -77,5 +77,5 @@
  *
  *  1.7: Wifi Part etwas überarbeitet
  *
- *  23.09.2022: Kondensator unterhalb der Antenne entfernt. Jetzt ist der Wifi-Empfang deutlich besser. (Modifikaton auf eigene Gefahr!!!)
+ *  23.09.2022: LILYGO® TTGO Wrist-E-Paper, Kondensator unterhalb der Antenne entfernt. Jetzt ist der Wifi-Empfang deutlich besser. (Modifikaton auf eigene Gefahr!!!)
  *  
