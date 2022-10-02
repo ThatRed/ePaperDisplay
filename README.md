@@ -75,4 +75,7 @@
  *  23.09.2022  Da der Wifi-Empfang sehr schlecht, bzw. nicht funktionierte beim LILYGO® TTGO Wrist-E-Paper, Kondensator (R0 Widerstandsjumper?) unterhalb     der Antenne entfernt. (Mir war beim vergleichen des Wrist-E-Paper mit einem LILYGO®TTGO T7 V 1,3 MINI32 ESP32, aufgefallen, das auf dem Mini32 an der       Stelle, ein Kondensator (R0 Widerstandsjumper?) nicht bestückt ist... Modifikaton auf eigene Gefahr!!!)
  *  
  *  08.08.2022 1.7.4: Wifi Part überarbeitet, damit die Verbindung auch bei Abbruch, wiederhergestellt wird
+ *
+ *  04.06.2022 1.5.0: Erste Veröffentlichung
+ *
  
