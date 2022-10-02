@@ -75,7 +75,9 @@
  *  Wichtig! Es wird ein Programmieradapter benötigt! Der USB-C Port auf der Platine ist kein echter USB-Port!!
  *  MP1584EN DC-DC 3A Buck Converter (24V->5V): https://www.amazon.de/dp/B07MY2XP21/ref=cm_sw_r_cp_api_i_C4W4QEAWF79WXW4AJQAR?_encoding=UTF8&psc=1
  *
- *  1.7: Wifi Part etwas überarbeitet
+ *  02.10.2022  1.7.6: Zur besseren Identifikation in WebOTA custom html eingebunden, epaper Display, Hostname, Version. Keller eingebunden
  *
- *  23.09.2022: LILYGO® TTGO Wrist-E-Paper, Kondensator (R0 Widerstandsjumper?) unterhalb der Antenne entfernt. Jetzt ist der Wifi-Empfang deutlich besser. (Mir war beim vergleichen des Wrist-E-Paper mit einem LILYGO®TTGO T7 V 1,3 MINI32 ESP32, aufgefallen, das auf dem Mini32 an der Stelle, ein Kondensator nicht bestückt ist... Modifikaton auf eigene Gefahr!!!)
+ *  23.09.2022  Da der Wifi-Empfang sehr schlecht, bzw. nicht funktionierte beim LILYGO® TTGO Wrist-E-Paper, Kondensator (R0 Widerstandsjumper?) unterhalb     der Antenne entfernt. (Mir war beim vergleichen des Wrist-E-Paper mit einem LILYGO®TTGO T7 V 1,3 MINI32 ESP32, aufgefallen, das auf dem Mini32 an der       Stelle, ein Kondensator (R0 Widerstandsjumper?) nicht bestückt ist... Modifikaton auf eigene Gefahr!!!)
  *  
+ *  08.08.2022 1.7.4: Wifi Part überarbeitet, damit die Verbindung auch bei Abbruch, wiederhergestellt wird
+ 
