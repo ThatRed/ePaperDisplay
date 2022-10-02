@@ -76,6 +76,6 @@
  *  
  *  08.08.2022 1.7.4: Wifi Part überarbeitet, damit die Verbindung auch bei Abbruch, wiederhergestellt wird
  *
- *  04.06.2022 1.5.0: Erste Veröffentlichung
+ *  04.06.2022 1.6.0: Erste Veröffentlichung
  *
  
