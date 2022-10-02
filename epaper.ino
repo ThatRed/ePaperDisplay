@@ -21,17 +21,12 @@
  *  WebOTA.h
  *  
  *  Schriftarten:
- *  Adafruit_GFX.h>
- *  Fonts/Picopixel.h>
- *  Fonts/TomThumb.h>
- *  Fonts/FreeSans9pt7b.h>
- *  Fonts/FreeSans12pt7b.h>
- *  Fonts/FreeSans18pt7b.h>
- *  Fonts/FreeSans24pt7b.h>
- *  Fonts/FreeSansBold9pt7b.h>
- *  Fonts/FreeSansBold12pt7b.h>
- *  Fonts/FreeSansBold18pt7b.h>
- *  Fonts/FreeSansBold24pt7b.h>
+ *  Adafruit_GFX.h
+ *  Fonts/Picopixel.h
+ *  Fonts/FreeSans9pt7b.h
+ *  Fonts/FreeSansBold9pt7b.h
+ *  Fonts/FreeSansBold12pt7b.h
+ *  Fonts/FreeSansBold18pt7b.h
  *
  *  WEMOS D1 mini Verkabelung:
  *  
@@ -69,31 +64,80 @@
  *
  */ 
 //
-// Wifi Konfiguration
+// Benutzerkonfiguration
+//
+//
+// Wifi
 //
 const char* ssid = "SSID";
-const char* password = "Passwort";
+const char* password = "pass";
 //
-// MQTT Konfiguration
+// MQTT
 //
-const char* mqttClient = "ePaperDisplayRaum";
-const char* mqtt_server = "IP-Adresse";
-const char* mqttUser = "Benutzer";
-const char* mqttPassword = "Passwort";
+//
+// Welcher MQTT Raum?
+//
+//#define Az
+//#define Sz
+//#define Wz
+#define Kl
+//
+// MQTT Server
+//
+const char* mqtt_server = "192.168.xxx.xxx";
+const char* mqttUser = "user";
+const char* mqttPassword = "pass";
 //
 // MQTT Topics
 //
-const char* mqttTopic_CO2 = "myhome/Raum/CO2";
-const char* mqttTopic_Vibra = "myhome/Raum/Vibra"; 
-const char* mqttTopic_PVModule = "myhome/Raum/PV-Module";
-const char* mqttTopic_Hum = "myhome/Raum/Hum";
-const char* mqttTopic_Temp = "myhome/Raum/Temp";
-const char* mqttTopic_Power = "myhome/Raum/Bezug";
-// const char* mqttTopic_ApartmentPresence = "myhome/Raum/AnAbwesendheit";
 //
-// NTP Server Konfiguration
+// MQTT Räume
 //
-const char* ntpServer = "lokale_IP-Adresse";
+#ifdef Az
+const char* mqttClient = "ePaperDisplayAz";
+String hostname = "Az";
+const char* mqttTopic_CO2 = "myhome/Az/CO2";
+const char* mqttTopic_Vibra = "myhome/Az/Vibra";
+const char* mqttTopic_PVModule = "myhome/Balkon/PV-Module";
+const char* mqttTopic_Power = "myhome/Wohnung/Bezug";
+#endif
+//
+#ifdef Sz
+const char* mqttClient = "ePaperDisplaySz";
+String hostname = "Sz";
+const char* mqttTopic_CO2 = "myhome/Sz/CO2";
+const char* mqttTopic_Vibra = "myhome/Sz/Vibra"; 
+const char* mqttTopic_PVModule = "myhome/Balkon/PV-Module";
+const char* mqttTopic_Power = "myhome/Wohnung/Bezug";
+#endif
+//
+#ifdef Wz
+const char* mqttClient = "ePaperDisplayWz";
+String hostname = "Wz";
+const char* mqttTopic_CO2 = "myhome/Wz/CO2";
+const char* mqttTopic_Vibra = "myhome/Wz/Vibra"; 
+const char* mqttTopic_PVModule = "myhome/Balkon/PV-Module";
+const char* mqttTopic_Power = "myhome/Wohnung/Bezug"; 
+#endif
+//
+#ifdef Kl
+const char* mqttClient = "ePaperDisplayKl";
+String hostname = "Kl";
+const char* mqttTopic_K_Hum = "myhome/Kl/hum";
+const char* mqttTopic_Vibra = "myhome/Kl/Vibra";
+const char* mqttTopic_B_Hum = "myhome/B/hum";
+const char* mqttTopic_J_Hum = "myhome/J/hum";  
+#endif
+//
+// MQTT allgemein
+//
+const char* mqttTopic_Hum = "myhome/Nord/Hum";
+const char* mqttTopic_Temp = "myhome/Nord/Temp";
+// const char* mqttTopic_ApartmentPresence = "myhome/Wohnung/AnAbwesendheit";
+//
+// NTP Server
+//
+const char* ntpServer = "192.168.xxx.xxx";
 // const char* ntpServer = "pool.ntp.org";
 const long  gmtOffset_sec = 3600; // CEST Zeitzonenversatz UTC/GMT +1 Stunde (Berlin)
 const int   daylightOffset_sec = 3600; // Sommerzeitversatz +1 Stunde 
@@ -104,15 +148,16 @@ int SCDelay = 6000;
 //
 // Waveshare 1.54" ePaper Displays, Kommentierung je nach Display und Entwicklungsboard entsprechend entfernen:
 //
-//#define Display_v2_ESP32        //bw Version >=2
+// #define Display_v2_ESP32        //bw Version >=2
 #define Display_Wrist_v2_ESP32  //bw Version >=2
 // #define Display_v2_ESP8266      //bw Version >=2
 //
 // #define Display_v2_bwr_ESP32    //bwr Version <2, leider noch keine Unterstützung für die neuen Tri-Color Displays in GxEPD.h!!
 // #define Display_v1_ESP8266      //bw Version <2, ungetestet!!
 //
-// Ende benutzerdefinierte Konfiguration
+// Ende Benutzerkonfiguration
 //
+
 const long interval = 60000;
 int timeState = 0;
 int restartState = 0;
@@ -122,10 +167,17 @@ unsigned long restartpreviousMillis = 0;
 unsigned long wifiinterval = 30000;
 unsigned long restartinterval = 30000;
 
-const char* Version = "1.7.3";
+String Version = "1.7.6";
 const char compile_date[] = __DATE__ " " __TIME__;
 
+//
+// Customized HTML Code for WebOTA update site:
+//
+String epD = "<h1>ePaper Display " + hostname + " Version: " + Version + "</h1>";
+
+//
 // Im Boardverwalter für ESP32, Version 2.0.4 installieren.
+//
 #ifdef ESP8266
   #include <ESP8266WiFi.h>
   #include <ESP8266mDNS.h>
@@ -136,7 +188,36 @@ const char compile_date[] = __DATE__ " " __TIME__;
   #error "Nur für Entwicklungsboards basierend auf ESP8266 oder ESP32!"
 #endif
 
+//
+// Display Konfigurationsfehler abfangen
+//
+#ifdef ESP8266
+#ifdef Display_Wrist_v2_ESP32
+#error "ePaper Wrist funktioniert nur mit ESP32!"
+#endif
+#endif
+
+#ifdef ESP8266 
+#ifdef Display_v2_bwr_ESP32
+#error "ePaper Display_v2_bwr funktioniert nur mit ESP32!"
+#endif
+#endif
+
+#ifdef ESP32
+#ifdef Display_v2_ESP8266
+#error "ePaper Display_v2_ESP8266 funktioniert nur mit ESP8266!"
+#endif
+#endif
+
+#ifdef ESP32
+#ifdef Display_v1_ESP8266
+#error "ePaper Display_v1_ESP8266 funktioniert nur mit ESP8266!"
+#endif
+#endif
+
+#ifdef ESP32
 #include "nvs_flash.h"
+#endif
 
 #include "time.h"
 #include <GxEPD.h>
@@ -268,17 +349,16 @@ GxEPD_Class display(io, /*RST=*/EPD_RESET, /*BUSY=*/EPD_BUSY);
 //Schriftarten einbinden
 #include <Adafruit_GFX.h>
 #include <Fonts/Picopixel.h>
-#include <Fonts/TomThumb.h>
+//#include <Fonts/TomThumb.h>
 #include <Fonts/FreeSans9pt7b.h>
-#include <Fonts/FreeSans12pt7b.h>
-#include <Fonts/FreeSans18pt7b.h>
-#include <Fonts/FreeSans24pt7b.h>
+//#include <Fonts/FreeSans12pt7b.h>
+//#include <Fonts/FreeSans18pt7b.h>
+//#include <Fonts/FreeSans24pt7b.h>
 #include <Fonts/FreeSansBold9pt7b.h>
 #include <Fonts/FreeSansBold12pt7b.h>
 #include <Fonts/FreeSansBold18pt7b.h>
-#include <Fonts/FreeSansBold24pt7b.h>
+//#include <Fonts/FreeSansBold24pt7b.h>
 
-// #include "bilder.h"
 #include "epdSplash.h"
 int status = WL_IDLE_STATUS;
 WiFiClient espClient;
@@ -334,8 +414,11 @@ void setup_wifi() {
             } else {
                restartState = 0;
             } 
+         #ifdef ESP32
          ESP_ERROR_CHECK(nvs_flash_erase());
          nvs_flash_init();
+         #endif
+         
          delay(500);
          ESP.restart();
         }   
@@ -372,49 +455,9 @@ void callback(String topic, byte* message, unsigned int length) {
   }
   Serial.println();
 
-   /*
-    if(topic=="stats4loxberry/mqttgateway/keepaliveepoch"){
-    //x, y, width, hight, color 
-    //int ePoch = atoi(messageTemp);
-    int ePoch = messageTemp.toInt();
-    ePoch =((ePoch-1230768000)+28800);
-    messageTemp=(String(ePoch));
-    Serial.print(messageTemp);
-    display.fillRect(60, 138, 140, 62, GxEPD_WHITE);
-    display.setFont(&FreeSansBold24pt7b);
-    display.setTextSize(1);
-    display.setCursor(70, 185);
-    display.print(messageTemp);
-    display.updateWindow(0, 0, 200, 200, false); 
-  }
-  
-    if(topic=="NodeRED/KWL_Stufe"){
-    display.fillRect(57, 90, 43, 40, GxEPD_WHITE);
-    display.setFont(&FreeSansBold24pt7b);
-    display.setTextSize(1);
-    display.setCursor(57, 126);
-    display.print(messageTemp);
-    display.updateWindow(0, 0, 200, 200, false);    
-  }
-
-  if(topic=="NodeRED/KWL_Bypass"){
-    display.fillRect(36, 70, 63, 20, GxEPD_WHITE);
-
-    display.setFont(&FreeSans9pt7b);
-    display.setTextSize(1);
-    display.setCursor(36, 84);
-    if(messageTemp == "bypass"){
-      display.print("Bypass");
-    }
-    else if(messageTemp == "waermetauscher"){
-      display.print("Warm");
-    }
-    display.updateWindow(0, 0, 200, 200, false);    
-  } 
-  */
-
   // Farben: GxEPD_WHITE, GxEPD_BLACK, GxEPD_RED
 
+ #ifndef Kl
   if(topic==mqttTopic_CO2){
     // x, y, width, hight, color
     display.fillRect(0, 25, 80, 41, GxEPD_WHITE);
@@ -425,28 +468,8 @@ void callback(String topic, byte* message, unsigned int length) {
     display.updateWindow(0, 0, 200, 200, false);
   }
 
-  if(topic==mqttTopic_Temp){
-    display.fillRect(105, 20, 72, 44, GxEPD_WHITE);
-    display.setFont(&FreeSansBold18pt7b);
-    display.setTextSize(1);
-    display.setCursor(105, 55);
-    display.print(messageTemp);
-    display.updateWindow(0, 0, 200, 200, false);
-  }
-
-  if(topic==mqttTopic_Hum){
-    // messageTemp += "%";
-    display.fillRect(105, 90, 62, 40, GxEPD_WHITE);
-    display.setFont(&FreeSansBold18pt7b);
-    display.setTextSize(1);
-    display.setCursor(105, 121);
-    display.print(messageTemp);
-    display.updateWindow(0, 0, 200, 200, false);
-  }
-
  if(topic==mqttTopic_PVModule){
     // x, y, width, hight, color
-    // messageTemp += "W";
     display.fillRect(5, 90, 95, 40, GxEPD_WHITE);
     display.setFont(&FreeSansBold18pt7b);
     display.setTextSize(1);
@@ -458,6 +481,7 @@ void callback(String topic, byte* message, unsigned int length) {
   if(topic==mqttTopic_Power){
     float comp = messageTemp.toFloat(); // String to float
     if (comp > 999.9){ // falls der Bezug größer als 9999.9 wird, die Schriftart verkleinern, damit das Nachbarfeld nicht überschrieben wird
+    // x, y, width, hight, color
     display.fillRect(5, 156, 95, 44, GxEPD_WHITE);
     display.setFont(&FreeSansBold12pt7b);
     display.setTextSize(1);
@@ -466,6 +490,7 @@ void callback(String topic, byte* message, unsigned int length) {
     display.print(messageTemp);
     display.updateWindow(0, 0, 200, 200, false);
     } else {
+    // x, y, width, hight, color
     display.fillRect(5, 156, 95, 44, GxEPD_WHITE);
     display.setFont(&FreeSansBold18pt7b);
     display.setTextSize(1);
@@ -475,6 +500,60 @@ void callback(String topic, byte* message, unsigned int length) {
     display.updateWindow(0, 0, 200, 200, false);
     }
   }
+ #endif
+
+ #ifdef Kl
+    if(topic==mqttTopic_K_Hum){
+    // x, y, width, hight, color
+    display.fillRect(5, 90, 95, 40, GxEPD_WHITE);
+    display.setFont(&FreeSansBold18pt7b);
+    display.setTextSize(1);
+    display.setCursor(5, 121);
+    display.print(messageTemp);
+    display.updateWindow(0, 0, 200, 200, false);  
+  }  
+    
+    if(topic==mqttTopic_B_Hum){
+    // x, y, width, hight, color
+    display.fillRect(5, 156, 95, 44, GxEPD_WHITE);
+    display.setFont(&FreeSansBold18pt7b);
+    display.setTextSize(1);
+    display.setCursor(5, 190);
+    display.print(messageTemp);
+    display.updateWindow(0, 0, 200, 200, false); 
+  }
+        
+    if(topic==mqttTopic_J_Hum){
+    // x, y, width, hight, color
+    display.fillRect(0, 25, 80, 41, GxEPD_WHITE);
+    display.setFont(&FreeSansBold18pt7b);
+    display.setTextSize(1);
+    display.setCursor(5, 55);
+    display.print(messageTemp);
+    display.updateWindow(0, 0, 200, 200, false);
+  }   
+ #endif
+
+  if(topic==mqttTopic_Temp){
+    // x, y, width, hight, color
+    display.fillRect(105, 20, 72, 44, GxEPD_WHITE);
+    display.setFont(&FreeSansBold18pt7b);
+    display.setTextSize(1);
+    display.setCursor(105, 55);
+    display.print(messageTemp);
+    display.updateWindow(0, 0, 200, 200, false);
+  }
+
+  if(topic==mqttTopic_Hum){
+    // x, y, width, hight, color
+    display.fillRect(105, 90, 62, 40, GxEPD_WHITE);
+    display.setFont(&FreeSansBold18pt7b);
+    display.setTextSize(1);
+    display.setCursor(105, 121);
+    display.print(messageTemp);
+    display.updateWindow(0, 0, 200, 200, false);
+  }
+
 
   /*if(topic==mqttTopic_ApartmentPresence){
     int ApartPresence = messageTemp.toInt();
@@ -506,17 +585,27 @@ void reconnect() {
     Serial.println("Attempting MQTT connection...");
     if (client.connect(mqttClient, mqttUser, mqttPassword)) {
       Serial.println("connected");  
-      // client.subscribe("NodeRED/KWL_Stufe");
-      // client.subscribe("NodeRED/KWL_Bypass");
+     
+     #ifndef Kl 
       client.subscribe(mqttTopic_CO2);
-      client.subscribe(mqttTopic_Temp);
-      client.subscribe(mqttTopic_Hum);
       client.subscribe(mqttTopic_PVModule);
       client.subscribe(mqttTopic_Power);
+     #endif
+     
+     #ifdef Kl
+      client.subscribe(mqttTopic_K_Hum);
+      client.subscribe(mqttTopic_B_Hum);
+      client.subscribe(mqttTopic_J_Hum);
+     #endif 
+      
+      client.subscribe(mqttTopic_Temp);
+      client.subscribe(mqttTopic_Hum);
       // client.subscribe(mqttTopic_ApartmentPresence); 
-       #ifdef Display_Wrist_v2_ESP32
+       
+     #ifdef Display_Wrist_v2_ESP32
       client.subscribe(mqttTopic_Vibra);    
-       #endif
+     #endif
+      
       } else {
       status = WiFi.status();
       Serial.print("wifi status: ");
@@ -630,7 +719,9 @@ void showsplash()
 
 void setup() {
   Serial.begin(115200);
+  #ifdef ESP32
   WiFi.disconnect(false,true);
+  #endif
   WiFi.setSleep(false);
   setup_wifi();
   Serial.print("RSSI: ");
@@ -639,25 +730,26 @@ void setup() {
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
   MDNS.begin(mqttClient);
+  
   webota.init(80, "/update");
-
+  webota.set_custom_html(epD.c_str());
+  
   #ifdef Display_Wrist_v2_ESP32
   SPI.begin(SPI_SCK, -1, SPI_DIN, EPD_CS);
   VibraMotor();
   #endif
 
   // Farben: GxEPD_WHITE, GxEPD_BLACK, GxEPD_RED 
-  Serial.println("Epaper init");
+  Serial.println("ePaper init");
   display.init();
   display.fillScreen(GxEPD_WHITE);
-  // display.update();
   display.setRotation(0);
   Serial.println("Show splash screen");
   showsplash();
   
   webota.delay(SCDelay);
   
-  Serial.println("Epaper init");
+  Serial.println("ePaper init");
   display.fillScreen(GxEPD_WHITE);
 
   Serial.println("Show grid");
@@ -665,41 +757,46 @@ void setup() {
   display.fillRect(0, 66, 200, 2, GxEPD_BLACK);
   display.fillRect(0, 133, 200, 2, GxEPD_BLACK);
   // x, y, width, hight, color
-  
-  /*
-  display.drawExampleBitmap(fan, 0, 76, 46 , 49, GxEPD_BLACK);
-  display.drawExampleBitmap(uhr, 0, 140, 56 , 56, GxEPD_BLACK);
-  display.drawExampleBitmap(temp2, 88, 4, 24 , 56, GxEPD_BLACK);
-  display.drawExampleBitmap(hum2, 105, 73, 18 , 56, GxEPD_BLACK);
-  */
 
   // Farben: GxEPD_WHITE, GxEPD_BLACK, GxEPD_RED
   display.setTextColor(GxEPD_BLACK);
   display.setFont(&FreeSans9pt7b);
   display.setTextSize(1);
-  display.setCursor(5, 17);
+
+  #ifndef Kl
+  display.setCursor(5, 17); 
   display.print("CO   ppm");
   // leider wird die ₂ in CO₂ nicht dargestellt, daher wird die 2 etwas nach unten verschoben:
   display.setCursor(32, 22);
   display.print("2");
-  display.setCursor(105, 17);
-  display.print("Nord  C");
-  display.setCursor(105, 84);
-  display.print("Nord %");
   display.setCursor(5, 84);
   display.print("PV W");
   display.setCursor(5, 151);
   display.print("Bezug W");
+  #endif
+  
+  #ifdef Kl
+  display.setCursor(5, 17); 
+  display.print("JVTech %");
+  display.setCursor(5, 84);
+  display.print("GZahler %");
+  // leider wird das ä nicht dargestellt, daher werden die Punkte gezeichnet:
+  display.fillCircle(34, 72, 1, GxEPD_BLACK);  //Xpos,Ypos,r,Farbe
+  display.fillCircle(36, 72, 1, GxEPD_BLACK);  //Xpos,Ypos,r,Farbe
+  display.setCursor(5, 151);
+  display.print("Bunker %");
+  #endif
+  
   display.setCursor(105, 151);
   display.print("Date&Time");
-
-  // display.fillCircle(80, 30, 5, GxEPD_BLACK);  //Xpos,Ypos,r,Farbe
-  // display.fillCircle(80, 30, 2, GxEPD_WHITE);  //Xpos,Ypos,r,Farbe
-
+  display.setCursor(105, 84);
+  display.print("Nord %");
+  display.setCursor(105, 17);
+  display.print("Nord  C");
   // leider wird das ° Zeichen in °C nicht dargestellt, daher wird es gezeichnet:
   display.fillCircle(151, 6, 2, GxEPD_BLACK);  //Xpos,Ypos,r,Farbe
   display.fillCircle(151, 6, 1, GxEPD_WHITE);  //Xpos,Ypos,r,Farbe
- 
+  
   display.update();
   Serial.println("setup done");
 
