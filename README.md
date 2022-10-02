@@ -23,15 +23,10 @@
  *  Schriftarten:
  *  Adafruit_GFX.h>
  *  Fonts/Picopixel.h>
- *  Fonts/TomThumb.h>
  *  Fonts/FreeSans9pt7b.h>
- *  Fonts/FreeSans12pt7b.h>
- *  Fonts/FreeSans18pt7b.h>
- *  Fonts/FreeSans24pt7b.h>
  *  Fonts/FreeSansBold9pt7b.h>
  *  Fonts/FreeSansBold12pt7b.h>
  *  Fonts/FreeSansBold18pt7b.h>
- *  Fonts/FreeSansBold24pt7b.h>
  *
  *  WEMOS D1 mini Verkabelung:
  *  
